@@ -1,0 +1,49 @@
+use sakila;
+
+#Query 1.- Write a query to display for each store its store ID, city, and country.
+
+select store.store_id, country.country, city.city
+from sakila.store
+left join sakila.address on store.address_id = address.address_id
+left join sakila.city on city.city_id = address.city_id
+left join sakila.country on city.country_id = country.country_id;
+
+#Query 2.- Write a query to display how much business, in dollars, each store brought in.
+select * from sakila.payment;
+select * from sakila.staff;
+select staff.store_id, sum(payment.amount) as dollars from sakila.staff
+join sakila.payment on staff.staff_id = payment.staff_id
+group by 1
+order by 1;
+
+#Query 3.- What is the average running time of films by category?
+select category.name, avg(film.length) as avg_length
+from sakila.film
+join sakila.film_category on film.film_id = film_category.film_id 
+join sakila.category on film_category.category_id = category.category_id
+group by 1;
+
+#Query 4. -Which film categories are longest?
+select category.name, avg(film.length) as avg_length
+from sakila.film
+join sakila.film_category on film.film_id = film_category.film_id 
+join sakila.category on film_category.category_id = category.category_id
+group by 1
+order by avg_length desc
+limit 5;
+
+#Query 5.- Display the most frequently rented movies in descending order.
+select film.title, count(rental.rental_id) as rental_times from sakila.film
+join sakila.inventory on film.film_id = inventory.film_id
+join sakila.rental on rental.inventory_id = inventory.inventory_id
+group by 1
+order by 2 desc;
+
+#Query 6.- List the top five genres in gross revenue in descending order.
+
+
+#Query 7.- Is "Academy Dinosaur" available for rent from Store 1?
+select * from sakila.film
+left join sakila.inventory on film.film_id = inventory.film_id
+left join sakila.store on store.store_id = inventory.store_id
+where store.store_id = '1' and film.title = 'academy dinosaur';
